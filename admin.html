@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Horários Disponíveis</h1>
+    <ul id="horarios-lista"></ul>
+    <a href="index.html">Voltar</a>
+  </div>
+
+  <script>
+    const horarios = [
+      "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"
+    ];
+    const lista = document.getElementById("horarios-lista");
+    horarios.forEach(h => {
+      const li = document.createElement("li");
+      li.textContent = h;
+      lista.appendChild(li);
+    });
+  </script>
+</body>
+</html>

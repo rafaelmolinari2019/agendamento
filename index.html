@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agendamento Online</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Agende seu horário</h1>
+    <form id="form-agendamento">
+      <input type="text" id="nome" placeholder="Nome completo" required />
+      <input type="tel" id="telefone" placeholder="Telefone" required />
+      <input type="email" id="email" placeholder="E-mail" required />
+      <input type="date" id="data" required />
+      <select id="horario" required>
+        <option value="">Selecione um horário</option>
+      </select>
+      <button type="submit">Confirmar Agendamento</button>
+    </form>
+    <div id="mensagem"></div>
+    <a href="agenda.html">Ver agendamentos</a>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
