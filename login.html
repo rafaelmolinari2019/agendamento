@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Administrativo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Login do Administrador</h1>
+    <form onsubmit="login(event)">
+      <label for="usuario">Usuário</label>
+      <input type="text" id="usuario" required />
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" required />
+
+      <button type="submit">Entrar</button>
+      <p id="mensagem"></p>
+    </form>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>

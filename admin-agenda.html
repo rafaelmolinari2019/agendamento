@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de Agendamentos</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Agendamentos Confirmados</h1>
+
+    <label for="filtroData">Filtrar por data:</label>
+    <input type="date" id="filtroData" />
+
+    <ul id="lista-agendamentos"></ul>
+
+    <div class="botoes">
+      <button onclick="exportarCSV()">Exportar CSV</button>
+      <button onclick="exportarPDF()">Exportar PDF</button>
+      <button onclick="enviarNotificacoes()">Enviar Notificações</button>
+      <button onclick="logout()">Sair</button>
+    </div>
+  </div>
+
+  <script>
+    if (!localStorage.getItem("logado")) {
+      window.location.href = "login.html";
+    }
+
+    const lista = document.getElementById("lista-agendamentos");
+    const filtroData = document.getElementById("filtroData");
+
+    function carregarAgendamentos(filtro = null) {
+      lista.innerHTML = "";
+      const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+      const filtrados = filtro
+        ? agendamentos.filter(a => a.data === filtro)
+        : agendamentos;
+
+      if (filtrados.length === 0) {
+        lista.innerHTML = "<li>Nenhum agendamento encontrado.</li>";
+        return;
+      }
+
+      filtrados.forEach((item, i) => {
+        const li = document.createElement("li");
+        li.textContent = `${item.data} às ${item.horario} - ${item.nome} (${item.telefone})`;
+        lista.appendChild(li);
+      });
+    }
+
+    filtroData.addEventListener("change", () => {
+      carregarAgendamentos(filtroData.value);
+    });
+
+    function exportarCSV() {
+      const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+      if (agendamentos.length === 0) {
+        alert("Nenhum agendamento para exportar.");
+        return;
+      }
+
+      let csv = "Nome,Telefone,E-mail,Data,Horário\n";
+      agendamentos.forEach(a => {
+        csv += `"${a.nome}","${a.telefone}","${a.email}","${a.data}","${a.horario}"\n`;
+      });
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "agendamentos.csv";
+      link.click();
+    }
+
+    async function exportarPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+
+      if (agendamentos.length === 0) {
+        alert("Nenhum agendamento para exportar.");
+        return;
+      }
+
+      doc.setFontSize(14);
+      doc.text("Agendamentos Confirmados", 20, 20);
+
+      let y = 30;
+      agendamentos.forEach((a, i) => {
+        doc.text(`${i + 1}. ${a.data} às ${a.horario} - ${a.nome} (${a.telefone})`, 20, y);
+        y += 10;
+        if (y > 280) {
+          doc.addPage();
+          y = 20;
+        }
+      });
+
+      doc.save("agendamentos.pdf");
+    }
+
+    function enviarNotificacoes() {
+      const agendamentos = JSON.parse(localStorage.getItem("agendamentos")) || [];
+      if (agendamentos.length === 0) {
+        alert("Nenhum agendamento para notificar.");
+        return;
+      }
+
+      agendamentos.forEach(a => {
+        console.log(`Enviando notificação para ${a.nome} (${a.telefone})`);
+      });
+
+      alert("Notificações simuladas enviadas com sucesso!");
+    }
+
+    function logout() {
+      localStorage.removeItem("logado");
+      window.location.href = "login.html";
+    }
+
+    carregarAgendamentos();
+  </script>
+</body>
+</html>
